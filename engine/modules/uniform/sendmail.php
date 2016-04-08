@@ -100,6 +100,16 @@ if ($config['use_admin_mail'] && $config['version_id'] < 10.5) {
 	}
 }
 
+// если был файл, то прикрепляем его к письму 
+if(isset($_FILES))
+foreach($_FILES as $n => $d){
+	if(is_array($d['name'])){
+		foreach($d['name'] as $i => $v)	
+			$mail->addAttachment($d['tmp_name'][$i], $d['name'][$i]); 
+	} else
+		$mail->addAttachment($d['tmp_name']['tmp_name'], $d['name']); 
+}
+
 // Отправляем почту на указанные адреса
 foreach ($arMails as $k => $email) {
 	$k = $mail->send($email, $emailHeader, $message);
